@@ -33,11 +33,11 @@ jobs:
         run: |
           REF="${{ inputs.workflow-ref }}"
           
-          Check if it's a branch
+          echo "Check if it's a branch"
           if git branch -r | grep -q "origin/$REF"; then
             echo "✓ Reference '$REF' is a BRANCH"
             echo "ref-type=branch" >> "$GITHUB_OUTPUT"
-          Check if it's a tag
+          echo "Check if it's a tag"
           elif git tag -l | grep -q "^$REF$"; then
             echo "✓ Reference '$REF' is a TAG"
             echo "ref-type=tag" >> "$GITHUB_OUTPUT"
