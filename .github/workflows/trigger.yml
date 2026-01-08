@@ -51,8 +51,6 @@ jobs:
             exit 1
           fi
 
-        # git fetch --all --tags
-
       - name: Trigger workflow
         uses: lordlive/custom-action/trigger@v1.0.7
         with:
