@@ -18,10 +18,9 @@ on:
         default: ''
         type: string
 
-# permissions:
-#   # id-token: write
-#   contents: write
-#   actions: write
+permissions:
+  contents: write
+  actions: write
 
 jobs:
   trigger:
