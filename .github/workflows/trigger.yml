@@ -27,7 +27,7 @@ jobs:
   trigger:
     runs-on: ubuntu-latest
     steps:
-      # - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Validate workflow-ref is a valid branch or tag
         run: |
@@ -51,6 +51,8 @@ jobs:
             git tag -l | head -20
             exit 1
           fi
+
+        # git fetch --all --tags
 
       - name: Trigger workflow
         uses: lordlive/custom-action/trigger@v1.0.7
