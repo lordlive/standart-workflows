@@ -29,29 +29,31 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # - name: Validate workflow-ref is a valid branch or tag
-      #   run: |
-      #     git fetch --all --tags
-      #     REF="${{ inputs.workflow-ref }}"
+      - name: Validate workflow-ref is a valid branch or tag
+        run: |
+          REF="${{ inputs.workflow-ref }}"
           
-      #     Check if it's a branch
-      #     if git branch -r | grep -q "origin/$REF"; then
-      #       echo "✓ Reference '$REF' is a BRANCH"
-      #       echo "ref-type=branch" >> "$GITHUB_OUTPUT"
-      #     Check if it's a tag
-      #     elif git tag -l | grep -q "^$REF$"; then
-      #       echo "✓ Reference '$REF' is a TAG"
-      #       echo "ref-type=tag" >> "$GITHUB_OUTPUT"
-      #     else
-      #       echo "✗ Error: Reference '$REF' is neither a valid branch nor a tag"
-      #       echo ""
-      #       echo "Available branches:"
-      #       git branch -r | head -20
-      #       echo ""
-      #       echo "Available tags:"
-      #       git tag -l | head -20
-      #       exit 1
-      #     fi
+          Check if it's a branch
+          if git branch -r | grep -q "origin/$REF"; then
+            echo "✓ Reference '$REF' is a BRANCH"
+            echo "ref-type=branch" >> "$GITHUB_OUTPUT"
+          Check if it's a tag
+          elif git tag -l | grep -q "^$REF$"; then
+            echo "✓ Reference '$REF' is a TAG"
+            echo "ref-type=tag" >> "$GITHUB_OUTPUT"
+          else
+            echo "✗ Error: Reference '$REF' is neither a valid branch nor a tag"
+            echo ""
+            echo "Available branches:"
+            git branch -r | head -20
+            echo ""
+            echo "Available tags:"
+            git tag -l | head -20
+            exit 1
+          fi
+
+        # git fetch --all --tags
+
       - name: Trigger workflow
         uses: lordlive/custom-action/trigger@v1.0.7
         with:
