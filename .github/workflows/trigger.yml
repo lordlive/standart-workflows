@@ -19,8 +19,9 @@ on:
         type: string
 
 permissions:
-  id-token: write
-  contents: read
+  # id-token: write
+  contents: write
+  actions: write
 
 jobs:
   trigger:
