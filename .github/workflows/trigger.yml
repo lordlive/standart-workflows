@@ -32,7 +32,7 @@ jobs:
       - name: Validate workflow-ref is a valid branch or tag
         run: |
           REF="${{ inputs.workflow-ref }}"
-          
+          git fetch --all --tags
           echo "Check if it's a branch"
           if git branch -r | grep -q "origin/$REF"; then
             echo "✓ Reference '$REF' is a BRANCH"
