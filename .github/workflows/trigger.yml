@@ -17,6 +17,11 @@ on:
         required: false
         default: ''
         type: string
+      github-job-runs-on:
+        description: The runner to use for the triggered workflow.
+        required: false
+        default: 'ubuntu-latest'
+        type: string
 
 permissions:
   contents: write
@@ -24,9 +29,9 @@ permissions:
 
 jobs:
   trigger:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.github-job-runs-on }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Validate workflow-ref is a valid branch or tag
         run: |
@@ -52,7 +57,7 @@ jobs:
           fi
 
       - name: Trigger workflow
-        uses: lordlive/custom-action/trigger@v1.0.7
+        uses: lordlive/custom-action/trigger@v1.0.8
         with:
           workflow-ref: ${{ inputs.workflow-ref }}
           workflow-path: ${{ inputs.workflow-path }}
