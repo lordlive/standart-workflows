@@ -83,7 +83,7 @@ This workflow depends on:
 
 ## Notes
 
-- The workflow runs on the specified runner (default: `linux-prod`)
+- The workflow runs on the specified runner (default: `ubuntu-latest`)
 - All tags and branches are fetched before validation to ensure accuracy
 - The workflow is designed to be called by other workflows (via `workflow_call`)
 - The reference validation step outputs the reference type (branch or tag) for logging purposes
