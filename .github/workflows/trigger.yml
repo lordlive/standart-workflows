@@ -1,0 +1,64 @@
+name: trigger
+run-name: trigger-${{ github.run_id }}
+
+on:
+  workflow_call:
+    inputs:
+      workflow-ref:
+        description: The reference of the workflow to trigger (tag or branch).
+        required: true
+        type: string
+      workflow-path:
+        description: The path to the execute workflow file.
+        required: true
+        type: string
+      build-version:
+        description: The version to be used.
+        required: false
+        default: ''
+        type: string
+      github-job-runs-on:
+        description: The runner to use for the triggered workflow.
+        required: false
+        default: 'ubuntu-latest'
+        type: string
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  trigger:
+    runs-on: ${{ inputs.github-job-runs-on }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Validate workflow-ref is a valid branch or tag
+        run: |
+          REF="${{ inputs.workflow-ref }}"
+          git fetch --all --tags
+          echo "Check if it's a branch"
+          if git branch -r | grep -q "origin/$REF"; then
+            echo "✓ Reference '$REF' is a BRANCH"
+            echo "ref-type=branch" >> "$GITHUB_OUTPUT"
+          echo "Check if it's a tag"
+          elif git tag -l | grep -q "^$REF$"; then
+            echo "✓ Reference '$REF' is a TAG"
+            echo "ref-type=tag" >> "$GITHUB_OUTPUT"
+          else
+            echo "✗ Error: Reference '$REF' is neither a valid branch nor a tag"
+            echo ""
+            echo "Available branches:"
+            git branch -r | head -20
+            echo ""
+            echo "Available tags:"
+            git tag -l | head -20
+            exit 1
+          fi
+
+      - name: Trigger workflow
+        uses: lordlive/custom-action/trigger@v1.0.8
+        with:
+          workflow-ref: ${{ inputs.workflow-ref }}
+          workflow-path: ${{ inputs.workflow-path }}
+          build-version: ${{ inputs.build-version }}
